@@ -20,7 +20,6 @@ function App() {
     };
     fetchItems();
   }, [player]);
-  console.log(data);
 
   return (
     <>
