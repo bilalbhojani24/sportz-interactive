@@ -1,24 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
-
+import react, { useState, useEffect } from "react";
+import axios from "axios";
+import "./App.css";
+import Body from "./Body";
 function App() {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [player, setPlayer] = useState("");
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const result = await axios(
+        `https://api.jsonbin.io/b/604f1c137ea6546cf3ddf46e`
+      );
+      const filteredData = result?.data?.playerList.filter((item) => {
+        return item.PFName.toLowerCase().includes(player.toLowerCase()) || item.TName.toLowerCase().includes(player.toLowerCase());
+      });
+      setData(filteredData.reverse());
+      setIsLoading(false);
+    };
+    fetchItems();
+  }, [player]);
+  console.log(data);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {isLoading ? (
+        "Loading"
+      ) : (
+        <>
+          <div className="row mx-0">
+          <div className="col-12 col-md-8 mx-auto">
+          <h3 className="heading">SPORTZ INTERACTIVE</h3>
+          <input
+          className="inputText"
+            type="text"
+            placeholder="Search player"
+            value={player}
+            onChange={(e) => {
+              setPlayer(e.target.value);
+            }}
+          />
+          </div>
+          
+        </div>
+        <Body data={data} />
+        </>
+      )}
+    </>
   );
 }
 
