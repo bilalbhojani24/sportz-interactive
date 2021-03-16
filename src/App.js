@@ -15,12 +15,15 @@ function App() {
       const filteredData = result?.data?.playerList.filter((item) => {
         return item.PFName.toLowerCase().includes(player.toLowerCase()) || item.TName.toLowerCase().includes(player.toLowerCase());
       });
-      setData(filteredData.reverse());
+      let data = filteredData.sort(function(a, b){
+        return a.Value - b.Value; // ascending order
+        // return b.Value - a.Value; // descending order
+      });
+      setData(data);
       setIsLoading(false);
     };
     fetchItems();
   }, [player]);
-
   return (
     <>
       {isLoading ? (
